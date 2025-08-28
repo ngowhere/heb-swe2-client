@@ -1,0 +1,48 @@
+Overview
+
+Before your interview, we would like you to complete the following coding challenge. Your
+solution will be discussed during the interview.
+We ask that you utilize Java or Python for backend and frontend frameworks you are most
+comfortable with to complete this challenge. We encourage creativity but value efficiency. We
+recommend spending 6-8 hours on this project. This should give you enough time to get
+something working, but we don’t expect you to display your complete breadth of engineering
+knowledge in this challenge.
+
+AI and CodeGen
+We recognize the use AI is available to you. We ask that you explain to us what you use, as well as
+be able to explain all the code no matter who wrote it.
+What We Are Looking For
+
+Complete the requirements as described below
+• Deliver a functioning product
+• Provide clear instructions to build and run your project
+• Exhibit use of software engineering best practices
+• This exercise is conceptual in nature and does not need to be a fully finished product
+• During the interview, we will:
+o Ask you to describe your design and implementation decisions.
+o Ask you to talk about testing scenarios and considerations for real-world
+deployment.
+o Ask you about the next set of features that you would want to implement or any
+improvements on your current implementation.
+
+Problem Description
+PART I
+
+Provide a basic ATM (Automated Teller Machine) User Interface. At a minimum, this UI should
+offer the following features:
+• Customer authenticates with a pin
+• Show the current account balance
+
+• Simulate the withdrawal of cash
+• Simulate a deposit
+• Show a daily withdrawal limit
+
+PART II
+
+Provide a HTTP REST API service layer to support the above implementation.
+• Provide the API specification via Swagger / OpenAPI
+• Utilize a persistent data store
+
+Submit the following when complete
+• Provide complete steps to compile and run your project.
+• The full source of your solution in a GitHub, Bitbucket or Gitlab repo.
