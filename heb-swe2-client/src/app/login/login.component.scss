@@ -1,0 +1,21 @@
+
+p{
+    font-size: 1.25em;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    min-width: 550px;
+    max-width: 550px;
+    background-color: rgb(49, 49, 49);
+
+    padding: 1.5em;
+    border-radius: 10px;;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

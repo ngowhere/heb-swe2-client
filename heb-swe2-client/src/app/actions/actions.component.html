@@ -1,0 +1,94 @@
+<div class = "container">
+    <div *ngIf=" action == 'None' ">
+        <h1>Select Action</h1>
+        <div class = "row">
+            <p class = "left-label">
+                Account Balance:
+            </p>
+            <p class = "right-label">
+                {{ currentBalance | currency }}
+            </p>
+        </div>
+
+        <div class = "action-buttons">
+            <button matButton="filled" (click)="selectAction('Deposit')">
+                Deposit
+            </button>
+            <button matButton="filled" (click)="selectAction('Withdraw')">
+                Withdraw
+            </button>
+            
+            <button matButton="outlined" (click)="logout()">
+                Log Out
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf=" action == 'Deposit' || action == 'Withdraw' ">
+        <h1>{{action}}</h1>
+        <div class = "row">
+            <p class = "left-label">
+                Account Balance:
+            </p>
+            <p class = "right-label">
+                {{ currentBalance | currency }}
+            </p>
+        </div>
+        <div class = "row">
+            <p class = "left-label">
+                {{action}} Amount:
+            </p>
+            
+            <div>
+                <span class = "operator">
+                    {{ action == 'Deposit' ? '+' : '-' }} 
+                </span>
+                <mat-form-field appearance="outline">
+                    <mat-label> {{action}} Amount</mat-label>
+                    <span matPrefix> &nbsp; $ &nbsp;</span>
+                    <input 
+                        class = "input-field"
+                        matInput
+                        [(ngModel)]="actionAmount" 
+                        type="number"
+                        min="0.01"
+                        step="0.01"
+                        [formControl]="moneyControl"
+                        placeholder="Enter amount"
+                    />
+                    <mat-error *ngIf="moneyControl.hasError('min')">
+                        Amount must be greater than 0
+                    </mat-error>
+                    <mat-error *ngIf="moneyControl.hasError('required')">
+                        Amount is required.
+                    </mat-error>
+                    <mat-error *ngIf="moneyControl.hasError('withdrawLimitExceeded')">
+                        Withdraw amount exceeds account balance
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            
+            
+        </div>
+        <hr>
+        <div class = "row">
+            <p class = "left-label">
+                New Account Balance:
+            </p>
+            <p class = "right-label">
+                {{ calculateNewBalance() | currency }}
+            </p>
+        </div>
+
+        <div class = "submission-button-choices">
+            <button matButton="outlined" (click)=" selectAction('None') ">
+                Cancel
+            </button>
+            <button matButton="filled" (click)="logout()">
+                Confirm {{action}}
+            </button>
+        </div>
+    </div>
+    
+    
+</div>

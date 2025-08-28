@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { Login } from './login/login';
-import { Actions } from './actions/actions'
+import { ActionsComponent } from './actions/actions.component'
+import { LoginComponent } from './login/login.component';
 export const routes: Routes = [
-    { path: '', component: Login },
-    { path: 'actions', component: Actions },
+    { path: '', component: LoginComponent },
+    { path: 'actions', component: ActionsComponent },
     { path: '**', redirectTo: '' }
 ];

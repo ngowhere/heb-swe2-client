@@ -1,0 +1,44 @@
+p{
+    font-size: 1.25em;
+}
+.action-buttons{
+    padding: 1em 0em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    min-width: 550px;
+    background-color: rgb(49, 49, 49);
+
+    padding: 1.5em;
+    border-radius: 10px;;
+}
+
+.input-field{
+    text-align: right;
+}
+
+.operator{
+    font-size: 2em;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.submission-button-choices{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding-top:2em;
+}
