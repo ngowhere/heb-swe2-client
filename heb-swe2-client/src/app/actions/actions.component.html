@@ -6,7 +6,12 @@
                 Account Balance:
             </p>
             <p class = "right-label">
-                {{ currentBalance | currency }}
+
+                <span *ngIf="balance$ | async as res; else loading">
+                    {{ res.balance | currency }}
+                </span>
+                <ng-template #loading>Loading…</ng-template>
+                
             </p>
         </div>
 
@@ -26,12 +31,26 @@
 
     <div *ngIf=" action == 'Deposit' || action == 'Withdraw' ">
         <h1>{{action}}</h1>
+
+        <div *ngIf="action == 'Withdraw'" class = "row withdraw-limit">
+            <p class = "left-label">
+                Max Withdraw Amount: {{MAX_WITHDRAWAL_PER_TRANSACTION}}
+            </p>
+            <p class = "right-label">
+                <span *ngIf="dailyWithdrawals$ | async as dailyWithdrawals">
+                    Withdrawals: {{ DAILY_WITHDRAWAL_COUNT_LIMIT - dailyWithdrawals }} of {{DAILY_WITHDRAWAL_COUNT_LIMIT}} remaining
+                </span>
+            </p>
+        </div>
         <div class = "row">
             <p class = "left-label">
                 Account Balance:
             </p>
             <p class = "right-label">
-                {{ currentBalance | currency }}
+                <span *ngIf="balance$ | async as res; else loading">
+                    {{ res.balance | currency }}
+                </span>
+                <ng-template #loading>Loading…</ng-template>
             </p>
         </div>
         <div class = "row">
@@ -65,6 +84,7 @@
                     <mat-error *ngIf="moneyControl.hasError('withdrawLimitExceeded')">
                         Withdraw amount exceeds account balance
                     </mat-error>
+                    
                 </mat-form-field>
             </div>
             
@@ -76,15 +96,21 @@
                 New Account Balance:
             </p>
             <p class = "right-label">
-                {{ calculateNewBalance() | currency }}
+                <span *ngIf="balance$ | async as res; else loading" class = "right-label">
+                {{ calculateNewBalance(res.balance) | currency }}
+                </span>
+                <ng-template #loading>Loading…</ng-template>
             </p>
+            
+
+            
         </div>
 
         <div class = "submission-button-choices">
             <button matButton="outlined" (click)=" selectAction('None') ">
                 Cancel
             </button>
-            <button matButton="filled" (click)="logout()">
+            <button matButton="filled" (click)="submitTransaction()">
                 Confirm {{action}}
             </button>
         </div>

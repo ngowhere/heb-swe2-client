@@ -7,7 +7,15 @@
         </p>
         
         <mat-form-field appearance="outline">
-            <input matInput type="number" min="0" placeholder="Enter ID Number"/>
+            <input  
+                matInput
+                type="number"
+                min="0" 
+                placeholder="Enter ID Number"
+                [(ngModel)]="userId"
+                name="userId"
+                (keyup.enter)="login()"
+            />
         </mat-form-field>
     </div>
 
@@ -19,9 +27,13 @@
         <mat-form-field appearance="outline">
             <input
                 matInput
-                type="number"
+                type="text"
+                inputmode="numeric"
                 min="0"
                 placeholder="Enter PIN"
+                [(ngModel)]="pin"
+                name="pin"
+                (keyup.enter)="login()"
             />
         </mat-form-field>
     </div>
@@ -29,4 +41,8 @@
     <button matButton="filled" (click)="login()"> 
         Log In 
     </button>
+
+    <p *ngIf="loginResult === false" class = "error">
+        Invalid credentials
+    </p>
 </div>

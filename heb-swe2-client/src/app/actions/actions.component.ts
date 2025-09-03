@@ -4,11 +4,11 @@ import { ReactiveFormsModule, FormControl, Validators, ValidatorFn, AbstractCont
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-
-const withdrawLimit = (balance:number, action:string, actionAmount: number): ValidatorFn => (control: AbstractControl): ValidationErrors | null => {
-  return (action == "Withdraw" && actionAmount > balance) ? { withdrawLimitExceeded: true } : null;
-};
+import { ActivatedRoute, Router } from '@angular/router';
+import { map, switchMap, shareReplay, take, startWith } from 'rxjs/operators';
+import { UserService } from '../services/user.service';
+import { Observable, Subject } from 'rxjs';
+import { BalanceResponse } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-actions',
@@ -24,9 +24,14 @@ const withdrawLimit = (balance:number, action:string, actionAmount: number): Val
   styleUrl: './actions.component.scss'
 })
 export class ActionsComponent {
-  constructor(private router: Router) {}
-  
-  currentBalance : number= 0;
+  DAILY_WITHDRAWAL_COUNT_LIMIT = 4
+  MAX_WITHDRAWAL_PER_TRANSACTION = 500
+
+  userId$!: Observable<number>;
+  balance$!: Observable<BalanceResponse>;
+  dailyWithdrawals$!: Observable<any>;
+
+  refresh$ = new Subject<void>();
 
   action : string = "None";
   actionAmount : number = 0.01;
@@ -35,20 +40,63 @@ export class ActionsComponent {
   moneyControl = new FormControl<number | null>(null, [
     Validators.required,
     Validators.min(0.01), 
-    withdrawLimit(this.currentBalance, this.action, this.actionAmount)
   ]);
 
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private route: ActivatedRoute,
+  ) {}
+
   ngOnInit(){
-    this.currentBalance = this.getBalance()
-  }
-  
-  getBalance(){
-    return 100
+    this.userId$ = this.route.paramMap.pipe(
+      map(pm => Number(pm.get('userId')))
+    );
+
+    this.balance$ = this.refresh$.pipe(
+      startWith(void 0), // triggers the first load
+      switchMap(() =>
+        this.userId$.pipe(
+          switchMap(id => this.userService.getBalance(id))
+        )
+      ),
+      shareReplay(1)
+    );
+
+    this.dailyWithdrawals$ = this.refresh$.pipe(
+      startWith(void 0), 
+      switchMap(() =>
+        this.userId$.pipe(
+          switchMap(id => this.userService.dailyWithdrawalCount(id))
+        )
+      ),
+      shareReplay(1)
+    );
+
   }
 
-  calculateNewBalance(){
-    const operator = this.action == "Deposit" ? 1 : -1;
-    return this.currentBalance + operator * (this.actionAmount || 0);
+  calculateNewBalance(balance: string | null): number {
+    const numericBalance = typeof balance === 'string' ? parseFloat(balance) : balance ?? 0;
+    const amount = this.actionAmount || 0;
+    const operator = this.action === 'Deposit' ? 1 : -1;
+
+    return numericBalance + operator * amount;
+  }
+
+  submitTransaction() {
+    this.userId$.pipe(
+      take(1),
+      switchMap(userId => {
+        const delta = this.action === 'Deposit' ? this.actionAmount : -this.actionAmount;
+        return this.userService.updateBalance(userId, delta);
+      })
+    ).subscribe({
+      next: () => {
+        alert('Transaction Complete!');
+        this.refresh$.next();
+      },
+      error: err => alert(err.error.detail)
+    });
   }
 
   logout(){
