@@ -32,9 +32,13 @@ ng serve
 
 3. **View Project**
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+--------------------------------------------------
+## Logging In
+1. User Id: 3 PIN: 1111
+2. User ID: 4 PIN: 2222
 
 --------------------------------------------------
-## Next Steps 
+## Next Features 
 - Auto Log Out
 - Auth Guard - ensure users cannot URL surf and visit the actions page without logging in first
 - Front End Testing using Jest
